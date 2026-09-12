@@ -1,0 +1,20 @@
+{
+  "lastChangelogVersion": "0.85.1",
+  "theme": "dark",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-terra",
+  "packages": [
+    "npm:pi-mcp-adapter",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:@ff-labs/pi-fff",
+    "npm:pi-hermes-memory",
+    "npm:pi-open-tui",
+    "npm:pi-balance"
+  ],
+  "hideThinkingBlock": false,
+  "terminal": {
+    "showImages": false
+  }
+}

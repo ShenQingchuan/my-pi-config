@@ -1,0 +1,6 @@
+# Credentials, session history, databases, caches, and installed package files stay local.
+.auth.json
+node_modules/
+*.sqlite
+*.sqlite-*
+.DS_Store

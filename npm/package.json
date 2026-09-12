@@ -1,0 +1,14 @@
+{
+  "name": "pi-extensions",
+  "private": true,
+  "dependencies": {
+    "@ff-labs/pi-fff": "^0.10.6",
+    "@juicesharp/rpiv-ask-user-question": "^2.9.0",
+    "@juicesharp/rpiv-todo": "^2.9.0",
+    "pi-balance": "^1.0.2",
+    "pi-hermes-memory": "^0.9.8",
+    "pi-mcp-adapter": "^2.33.0",
+    "pi-open-tui": "^0.3.5",
+    "pi-subagents": "^0.67.0"
+  }
+}
