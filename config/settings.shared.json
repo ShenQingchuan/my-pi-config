@@ -1,8 +1,6 @@
 {
   "lastChangelogVersion": "0.85.1",
   "theme": "dark",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-terra",
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-subagents",
