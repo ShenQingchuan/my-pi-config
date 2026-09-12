@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { existsSync, lstatSync, mkdirSync, readlinkSync } from "node:fs";
-import { cp, mkdir, readFile, rename, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, symlink, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 
 // 这些配置与当前机器、账号或模型偏好有关，不由仓库覆盖。
