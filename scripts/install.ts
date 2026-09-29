@@ -13,7 +13,7 @@ const localOnlySettings = new Set([
   "enabledModels",
 ]);
 
-const repoDir = resolve(import.meta.dir);
+const repoDir = resolve(import.meta.dir, "..");
 const piDir = process.env.PI_CONFIG_DIR ?? join(process.env.HOME ?? "", ".pi", "agent");
 const timestamp = new Date().toISOString().replaceAll(/[:.]/g, "-");
 const backupDir = join(piDir, "backups", timestamp);

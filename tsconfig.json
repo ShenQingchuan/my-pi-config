@@ -10,5 +10,5 @@
     "skipLibCheck": true,
     "types": ["bun"]
   },
-  "include": ["install.ts"]
+  "include": ["scripts/**/*.ts"]
 }
