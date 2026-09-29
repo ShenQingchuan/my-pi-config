@@ -4,7 +4,6 @@
   "dependencies": {
     "@ff-labs/pi-fff": "^0.11.0",
     "@juicesharp/rpiv-ask-user-question": "^2.11.0",
-    "@juicesharp/rpiv-todo": "^2.11.0",
     "@tintinweb/pi-subagents": "^0.19.0",
     "pi-ayu-themes": "^1.0.0",
     "pi-balance": "^1.0.2",

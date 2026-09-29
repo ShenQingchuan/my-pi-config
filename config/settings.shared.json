@@ -5,7 +5,6 @@
     "npm:pi-mcp-adapter",
     "npm:@tintinweb/pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@juicesharp/rpiv-todo",
     "npm:@ff-labs/pi-fff",
     "npm:pi-hermes-memory",
     "npm:pi-open-tui",
