@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "settingsLanguage": "en",
+  "settingsLanguage": "zh",
   "cursorStyle": "block",
   "fullscreen": {
     "wheelScrollLines": 4
@@ -30,6 +30,6 @@
     "cost": true
   },
   "thinkingPeek": {
-    "lines": 1
+    "lines": 2
   }
 }
