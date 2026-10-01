@@ -13,7 +13,7 @@ const localOnlySettings = new Set([
   "enabledModels",
 ]);
 
-const repoDir = resolve(import.meta.dir);
+const repoDir = resolve(import.meta.dir, "..");
 const piDir = process.env.PI_CONFIG_DIR ?? join(process.env.HOME ?? "", ".pi", "agent");
 const timestamp = new Date().toISOString().replaceAll(/[:.]/g, "-");
 const backupDir = join(piDir, "backups", timestamp);
@@ -86,7 +86,7 @@ async function install(): Promise<void> {
   await mkdir(piDir, { recursive: true });
   await writeFile(targetSettingsPath, `${JSON.stringify(mergedSettings, null, 2)}\n`);
 
-  await backupThenLink(join(repoDir, "system.md"), join(piDir, "system.md"));
+  await backupThenLink(join(repoDir, "SYSTEM.md"), join(piDir, "SYSTEM.md"));
   await backupThenLink(join(repoDir, "extension-config", "open-tui.json"), join(piDir, "open-tui.json"));
   await backupThenLink(join(repoDir, "extension-config", "pi-fff.json"), join(piDir, "pi-fff.json"));
   await backupThenLink(join(repoDir, "npm", "package.json"), join(piDir, "npm", "package.json"));

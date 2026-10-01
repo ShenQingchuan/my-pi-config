@@ -2,13 +2,14 @@
   "name": "pi-extensions",
   "private": true,
   "dependencies": {
-    "@ff-labs/pi-fff": "^0.10.6",
-    "@juicesharp/rpiv-ask-user-question": "^2.9.0",
-    "@juicesharp/rpiv-todo": "^2.9.0",
+    "@ff-labs/pi-fff": "^0.11.0",
+    "@juicesharp/rpiv-ask-user-question": "^2.12.0",
+    "@tintinweb/pi-subagents": "^0.19.0",
+    "pi-ayu-themes": "^1.0.0",
     "pi-balance": "^1.0.2",
-    "pi-hermes-memory": "^0.9.8",
-    "pi-mcp-adapter": "^2.33.0",
-    "pi-open-tui": "^0.3.5",
-    "pi-subagents": "^0.67.0"
+    "pi-context-view": "^0.6.0",
+    "pi-hermes-memory": "^0.9.9",
+    "pi-mcp-adapter": "^3.3.0",
+    "pi-open-tui": "^0.3.10"
   }
 }

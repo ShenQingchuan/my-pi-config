@@ -21,7 +21,7 @@
 git clone git@github.com:ShenQingchuan/my-pi-config.git
 cd my-pi-config
 bun install
-./install.sh
+./scripts/install.sh
 pi update --extensions
 ```
 

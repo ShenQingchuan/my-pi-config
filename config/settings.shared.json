@@ -1,18 +1,26 @@
 {
   "lastChangelogVersion": "0.85.1",
-  "theme": "dark",
+  "theme": "ayu-dark",
   "packages": [
     "npm:pi-mcp-adapter",
-    "npm:pi-subagents",
+    "npm:@tintinweb/pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@juicesharp/rpiv-todo",
     "npm:@ff-labs/pi-fff",
     "npm:pi-hermes-memory",
     "npm:pi-open-tui",
-    "npm:pi-balance"
+    "npm:pi-balance",
+    "npm:pi-context-view",
+    "npm:pi-ayu-themes"
   ],
   "hideThinkingBlock": false,
   "terminal": {
-    "showImages": false
-  }
+    "showImages": false,
+    "showTerminalProgress": true
+  },
+  "tuiMode": "fullscreen",
+  "quietStartup": true,
+  "steeringMode": "all",
+  "outputPad": 0,
+  "collapseChangelog": true,
+  "showCacheMissNotices": true
 }
