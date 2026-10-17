@@ -92,6 +92,7 @@ async function install(): Promise<void> {
   await writeFile(targetSettingsPath, `${JSON.stringify(mergedSettings, null, 2)}\n`)
 
   await backupThenLink(join(repoDir, 'SYSTEM.md'), join(piDir, 'SYSTEM.md'))
+  await backupThenLink(join(repoDir, 'config', 'hermes-memory-config.json'), join(piDir, 'hermes-memory-config.json'))
   await backupThenLink(join(repoDir, 'extension-config', 'open-tui.json'), join(piDir, 'open-tui.json'))
   await backupThenLink(join(repoDir, 'extension-config', 'pi-fff.json'), join(piDir, 'pi-fff.json'))
   await backupThenLink(join(repoDir, 'extension-config', 'mcp.json'), join(piDir, 'mcp.json'))
