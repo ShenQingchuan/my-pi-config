@@ -9,7 +9,8 @@
     "npm:pi-open-tui",
     "npm:pi-balance",
     "npm:pi-context-view",
-    "npm:pi-ayu-themes"
+    "npm:pi-ayu-themes",
+    "npm:pi-claude-code-ui"
   ],
   "hideThinkingBlock": false,
   "terminal": {
