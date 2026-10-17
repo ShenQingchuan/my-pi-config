@@ -13,6 +13,9 @@
     "./extensions/pi-claude-code-ui",
     "./extensions/deepseek-search"
   ],
+  "defaultTools": [
+    "+codemode"
+  ],
   "hideThinkingBlock": true,
   "thinkingPeekLines": 10,
   "readOutputMode": "summary",
