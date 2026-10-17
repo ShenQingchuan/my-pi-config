@@ -4770,25 +4770,69 @@ function adaptiveWrapRows(tw?: number): number {
 	return MAX_WRAP_ROWS_NARROW;
 }
 
-function fit(value: string, width: number): string {
-	if (width <= 0) return "";
-	const plain = diffStrip(value);
-	if (plain.length <= width) return value + " ".repeat(width - plain.length);
-	const showWidth = width > 2 ? width - 1 : width;
-	let vis = 0;
-	let i = 0;
-	while (i < value.length && vis < showWidth) {
-		if (value[i] === "\x1b") {
-			const end = value.indexOf("m", i);
+// Diff layout must be measured in terminal cells, not JS string length: a CJK
+// char or emoji takes two cells but `.length === 1`, so padding/wrapping based
+// on `.length` renders every such line wider than the pane it was sized for
+// (the pane's border gets pushed out and the TUI loses vertical sync).
+const GRAPHEME_SEGMENTER =
+	typeof Intl !== "undefined" && typeof (Intl as any).Segmenter === "function"
+		? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+		: null;
+
+function graphemes(text: string): string[] {
+	if (!GRAPHEME_SEGMENTER) return Array.from(text);
+	return Array.from(GRAPHEME_SEGMENTER.segment(text), (entry: any) => entry.segment as string);
+}
+
+interface CellToken {
+	text: string;
+	/** Display width in terminal cells; 0 for ANSI escape sequences. */
+	width: number;
+}
+
+/** Split styled text into ANSI escapes (width 0) and grapheme clusters (real width). */
+function cellTokenize(text: string): CellToken[] {
+	const tokens: CellToken[] = [];
+	let plain = "";
+	const flushPlain = (): void => {
+		if (!plain) return;
+		for (const segment of graphemes(plain)) tokens.push({ text: segment, width: visibleWidth(segment) });
+		plain = "";
+	};
+	for (let i = 0; i < text.length;) {
+		if (text[i] === "\x1b") {
+			const end = text.indexOf("m", i);
 			if (end !== -1) {
+				flushPlain();
+				tokens.push({ text: text.slice(i, end + 1), width: 0 });
 				i = end + 1;
 				continue;
 			}
 		}
-		vis++;
+		plain += text[i];
 		i++;
 	}
-	return width > 2 ? `${value.slice(0, i)}${D_RST}${FG_DIM}›${D_RST}` : `${value.slice(0, i)}${D_RST}`;
+	flushPlain();
+	return tokens;
+}
+
+function fit(value: string, width: number): string {
+	if (width <= 0) return "";
+	const plainWidth = visibleWidth(diffStrip(value));
+	if (plainWidth <= width) return value + " ".repeat(width - plainWidth);
+	const showWidth = width > 2 ? width - 1 : width;
+	let vis = 0;
+	let kept = "";
+	for (const token of cellTokenize(value)) {
+		if (token.width === 0) {
+			kept += token.text;
+			continue;
+		}
+		if (vis + token.width > showWidth) break;
+		kept += token.text;
+		vis += token.width;
+	}
+	return width > 2 ? `${kept}${D_RST}${FG_DIM}›${D_RST}` : `${kept}${D_RST}`;
 }
 
 function ansiState(text: string): string {
@@ -4829,63 +4873,50 @@ function normalizeShikiContrast(ansi: string): string {
 
 function wrapAnsi(text: string, width: number, maxRows = adaptiveWrapRows(), fillBg = ""): string[] {
 	if (width <= 0) return [""];
-	const plain = diffStrip(text);
-	if (plain.length <= width) {
-		const pad = width - plain.length;
+	const plainWidth = visibleWidth(diffStrip(text));
+	if (plainWidth <= width) {
+		const pad = width - plainWidth;
 		return pad > 0 ? [text + fillBg + " ".repeat(pad) + (fillBg ? D_RST : "")] : [text];
 	}
 
+	const tokens = cellTokenize(text);
 	const rows: string[] = [];
 	let row = "";
 	let vis = 0;
-	let i = 0;
-	let onLastRow = false;
-	let effectiveWidth = width;
+	// The last allowed row keeps one extra cell free for the `›` cut-off marker.
+	const lastRowWidth = width > 2 ? width - 1 : width;
 
-	while (i < text.length) {
-		if (!onLastRow && rows.length >= maxRows - 1) {
-			onLastRow = true;
-			effectiveWidth = width > 2 ? width - 1 : width;
+	for (let i = 0; i < tokens.length; i++) {
+		const token = tokens[i];
+		if (token.width === 0) {
+			row += token.text;
+			continue;
 		}
-		if (text[i] === "\x1b") {
-			const end = text.indexOf("m", i);
-			if (end !== -1) {
-				row += text.slice(i, end + 1);
-				i = end + 1;
-				continue;
-			}
+		const onLastRow = rows.length >= maxRows - 1;
+		const rowWidth = onLastRow ? lastRowWidth : width;
+		if (vis + token.width <= rowWidth) {
+			row += token.text;
+			vis += token.width;
+			continue;
 		}
-		if (vis >= effectiveWidth) {
-			if (onLastRow) {
-				let hasMore = false;
-				for (let j = i; j < text.length; j++) {
-					if (text[j] === "\x1b") {
-						const e2 = text.indexOf("m", j);
-						if (e2 !== -1) {
-							j = e2;
-							continue;
-						}
-					}
-					hasMore = true;
-					break;
-				}
-				if (hasMore && width > 2) row += `${D_RST}${FG_DIM}›${D_RST}`;
-				else row += fillBg + " ".repeat(Math.max(0, width - vis)) + D_RST;
-				rows.push(row);
-				return rows;
-			}
-			const state = ansiState(row);
-			rows.push(row + D_RST);
-			row = state + fillBg;
-			vis = 0;
-			if (rows.length >= maxRows - 1) {
-				onLastRow = true;
-				effectiveWidth = width > 2 ? width - 1 : width;
-			}
+		if (vis === 0) {
+			// A single cluster wider than the whole pane: emit it anyway so the
+			// loop always advances instead of spinning on the same token.
+			row += token.text;
+			vis += token.width;
+			continue;
 		}
-		row += text[i];
-		vis++;
-		i++;
+		if (onLastRow) {
+			// No more rows allowed — mark the cut-off instead of dropping text silently.
+			rows.push(width > 2 ? `${row}${D_RST}${FG_DIM}›${D_RST}` : `${row}${fillBg}${" ".repeat(Math.max(0, width - vis))}${D_RST}`);
+			return rows;
+		}
+		// Carry the active ANSI style into the continuation row.
+		const state = ansiState(row);
+		rows.push(row + D_RST);
+		row = state + fillBg;
+		vis = 0;
+		i--; // retry this token on the fresh row
 	}
 
 	if (row.length > 0 || rows.length === 0) {
@@ -4979,7 +5010,7 @@ function shouldUseSplit(diff: ParsedDiff, tw: number, maxRows = MAX_PREVIEW_LINE
 	for (const line of vis) {
 		if (line.type === "sep") continue;
 		contentLines++;
-		if (tabs(line.content).length > cw) wrapCandidates++;
+		if (visibleWidth(tabs(line.content)) > cw) wrapCandidates++;
 	}
 	if (contentLines === 0) return true;
 	const wrapRatio = wrapCandidates / contentLines;
@@ -5261,7 +5292,7 @@ async function renderUnified(
 			const gap = line.newNum;
 			const label = gap && gap > 0 ? ` ${gap} unmodified lines ` : "···";
 			const totalW = Math.min(tw, 72);
-			const pad = Math.max(0, totalW - label.length - 2);
+			const pad = Math.max(0, totalW - visibleWidth(label) - 2);
 			const half1 = Math.floor(pad / 2);
 			const half2 = pad - half1;
 			out.push(`${BG_BASE}${FG_DIM}${"─".repeat(half1)}${label}${"─".repeat(half2)}${D_RST}`);
