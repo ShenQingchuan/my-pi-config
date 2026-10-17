@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CONTEXT7_API_KEY}"
+      },
+      "description": "Up-to-date library and framework documentation"
+    },
+    "deepwiki": {
+      "url": "https://mcp.deepwiki.com/mcp",
+      "description": "AI-powered documentation for GitHub repositories"
+    },
+    "anysearch": {
+      "url": "https://api.anysearch.com/mcp",
+      "headers": {
+        "X-Anysearch-Client": "mcp/1.0.0",
+        "Authorization": "Bearer ${ANYSEARCH_API_KEY}"
+      },
+      "description": "Unified real-time web and vertical-domain search"
+    }
+  }
+}

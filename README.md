@@ -9,11 +9,31 @@
 - 全局系统提示词
 - 已选 Pi 插件与锁定版本
 - `pi-open-tui`、`pi-fff` 等扩展配置
+- 内置 MCP 服务器（Context7、DeepWiki、AnySearch）
 
 ## 特性
 
 - 在不同电脑上快速恢复一致的 Pi 使用体验
 - 保留每台电脑各自的模型选择
+
+## MCP 服务器
+
+配置写在 `extension-config/mcp.json`，安装后链接到 `~/.pi/agent/mcp.json`。
+
+| 服务器 | 用途 | 密钥 |
+| --- | --- | --- |
+| Context7 | 最新的库 / 框架文档 | 可选，`CONTEXT7_API_KEY`（密钥在 [context7.com/dashboard](https://context7.com/dashboard) 领取） |
+| DeepWiki | GitHub 仓库的 AI 文档 | 无需密钥（免费） |
+| AnySearch | 联网搜索 / 垂直领域搜索 | 可选，`ANYSEARCH_API_KEY`（密钥在 [anysearch.com/console/api-keys](https://anysearch.com/console/api-keys) 领取） |
+
+密钥通过环境变量提供，写入你的 shell 配置文件（如 `~/.zshrc`）：
+
+```bash
+export CONTEXT7_API_KEY="你的 Context7 密钥"
+export ANYSEARCH_API_KEY="你的 AnySearch 密钥"
+```
+
+> Context7 与 AnySearch 不填密钥也能用，只是速率上限较低；DeepWiki 完全免费。
 
 ## 快速开始
 
