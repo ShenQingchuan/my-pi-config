@@ -10,8 +10,4 @@ if ! command -v bun >/dev/null 2>&1; then
 fi
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# 安装 vendored 扩展（pi-claude-code-ui）自己的运行时依赖
-(cd "$repo_dir/extensions/pi-claude-code-ui" && bun install)
-
 exec bun run "$repo_dir/install.ts"
