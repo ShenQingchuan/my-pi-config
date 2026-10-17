@@ -2,13 +2,13 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext"],
+    "moduleDetection": "force",
     "module": "Preserve",
     "moduleResolution": "bundler",
-    "moduleDetection": "force",
-    "noEmit": true,
+    "types": ["bun"],
     "strict": true,
-    "skipLibCheck": true,
-    "types": ["bun"]
+    "noEmit": true,
+    "skipLibCheck": true
   },
   "include": ["scripts/**/*.ts"]
 }
