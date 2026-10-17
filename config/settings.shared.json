@@ -10,7 +10,7 @@
     "npm:pi-balance",
     "npm:pi-context-view",
     "npm:pi-ayu-themes",
-    "npm:pi-claude-code-ui"
+    "./extensions/pi-claude-code-ui"
   ],
   "hideThinkingBlock": true,
   "readOutputMode": "summary",

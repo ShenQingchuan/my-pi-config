@@ -1,0 +1,17 @@
+{
+  "name": "pi-claude-code-ui",
+  "version": "1.0.86",
+  "description": "Vendored fork of pi-claude-code-ui (Claude Code-style tool rendering for Pi). Upstream: github.com/FammasMaz/pi-cc-tools (MIT).",
+  "license": "MIT",
+  "author": "FammasMaz",
+  "dependencies": {
+    "@shikijs/cli": "^4.0.2",
+    "diff": "^9.0.0"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/index.ts",
+      "./extensions/spinner.ts"
+    ]
+  }
+}
