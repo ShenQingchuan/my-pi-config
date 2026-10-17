@@ -6,5 +6,5 @@ node_modules/
 .DS_Store
 tmp/
 
-# 从本地会话抽出的真实提问，含个人内容，只在本机使用
-research/gemini-voice/corpus/_real_prompts.txt
+# 本地研究产物与导出，不入库
+research/
