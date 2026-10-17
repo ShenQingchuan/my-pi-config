@@ -2367,6 +2367,7 @@ class ThinkingParagraph {
 	private cachedHovered = false;
 	private chromeEpoch = -1;
 	private options?: MarkdownOptions;
+	private peekLines = 0;
 
 	setHovered(hovered: boolean): void {
 		if (this.hovered === hovered) return;
@@ -2379,11 +2380,13 @@ class ThinkingParagraph {
 		_markdownTheme: ConstructorParameters<typeof Markdown>[3],
 		_defaultTextStyle?: ConstructorParameters<typeof Markdown>[4],
 		options?: MarkdownOptions,
+		peekLines = 0,
 	) {
 		// Prefix only the renderer's private copy. The assistant message itself is
 		// canonical session data and must remain untouched for compaction replay.
 		this.text = prefixThinkingLine(stripTransientMagicContextTags(text), undefined);
 		this.options = options;
+		this.peekLines = Math.max(0, Math.floor(peekLines));
 	}
 
 	private thinkingMarkdown(): InstanceType<typeof Markdown> {
@@ -2445,7 +2448,10 @@ class ThinkingParagraph {
 			this.cachedLines = [clampLineWidth(` ${prefix} `, safeWidth)];
 			return this.cachedLines;
 		}
-		const lines = sanitizeRenderedTextBlockLines(md.render(safeWidth - PREFIX_W), safeWidth - PREFIX_W);
+		const allLines = sanitizeRenderedTextBlockLines(md.render(safeWidth - PREFIX_W), safeWidth - PREFIX_W);
+		// 流式思考只保留最后 peekLines 个视觉行，随输出滚动；Ctrl+T 展开时 peekLines 为 0。
+		const hiddenCount = this.peekLines > 0 ? Math.max(0, allLines.length - this.peekLines) : 0;
+		const lines = hiddenCount > 0 ? allLines.slice(hiddenCount) : allLines;
 		const displayLines = this.hovered ? lines.map((line) => brightenRenderedLine(line)) : lines;
 		let symbolPlaced = false;
 		const rendered = displayLines.map((line: string) => {
@@ -2455,6 +2461,9 @@ class ThinkingParagraph {
 			}
 			return `   ${line}`;
 		}).map((line) => clampLineWidth(line, safeWidth));
+		if (hiddenCount > 0) {
+			rendered.push(clampLineWidth(`   ${WORKED_LINE_FG}… 已折叠 ${hiddenCount} 行${RESET}`, safeWidth));
+		}
 		this.cachedWidth = width;
 		this.cachedHovered = this.hovered;
 		this.cachedLines = rendered;
@@ -2780,8 +2789,7 @@ function patchAssistantMessages(): void {
 				const isThinking = !!(inner as any).defaultTextStyle?.italic;
 				if (isThinking) {
 					const style = (inner as any).defaultTextStyle;
-					const shownText = showLiveThinking && thinkingPeekLines > 0 ? truncateToLastLines(text, thinkingPeekLines) : text;
-					const replacement = new ThinkingParagraph(shownText, mdTheme, style, options);
+					const replacement = new ThinkingParagraph(text, mdTheme, style, options, showLiveThinking ? thinkingPeekLines : 0);
 					if ((child as any)?.child !== undefined) {
 						(child as any).child = replacement;
 					} else {
@@ -4896,11 +4904,6 @@ function lnum(n: number | null, width: number, fg = FG_LNUM): string {
 
 function stripes(width: number): string {
 	return BG_BASE + FG_STRIPE + "╱".repeat(width) + D_RST;
-}
-
-function truncateToLastLines(text: string, max: number): string {
-	const lines = text.split("\n");
-	return lines.length <= max ? text : lines.slice(lines.length - max).join("\n");
 }
 
 function renderDiffStatBar(added: number, removed: number, width = termW()): string {

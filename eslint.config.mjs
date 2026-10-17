@@ -3,7 +3,8 @@ import antfu from '@antfu/eslint-config'
 export default antfu(
   {
     ignores: [
-      'extensions/**',
+      // 第三方 vendored 代码，保持上游原样便于对比更新
+      'extensions/pi-claude-code-ui/**',
       'npm/**',
     ],
   },

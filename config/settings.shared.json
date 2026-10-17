@@ -10,7 +10,8 @@
     "npm:pi-balance",
     "npm:pi-context-view",
     "npm:pi-ayu-themes",
-    "./extensions/pi-claude-code-ui"
+    "./extensions/pi-claude-code-ui",
+    "./extensions/deepseek-search"
   ],
   "hideThinkingBlock": true,
   "thinkingPeekLines": 10,

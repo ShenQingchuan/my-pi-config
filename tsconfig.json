@@ -10,5 +10,8 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["scripts/**/*.ts"]
+  "include": [
+    "scripts/**/*.ts",
+    "extensions/deepseek-search/**/*.ts"
+  ]
 }

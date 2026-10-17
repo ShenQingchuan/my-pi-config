@@ -1,0 +1,15 @@
+{
+  "name": "pi-deepseek-search",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DeepSeek Search / Fetch tools for Pi (precise operator-based web search and Markdown page fetching)",
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  }
+}
