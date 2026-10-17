@@ -5615,7 +5615,7 @@ function renderEditPreviewBody(
 		renderSplit(diff, language, ctx.expanded ? MAX_PREVIEW_LINES : 32, dc, branchWidth)
 			.then((rendered) => {
 				if (ctx.state._pk !== key) return;
-				ctx.state._ptBody = `${summarizeDiff(diff.added, diff.removed)}${formatLineMeta(line, theme)}\n${rendered}`;
+				ctx.state._ptBody = rendered;
 				ctx.state._ptDisplay = indentBranchBlock(withBranch(ctx.state._ptBody, theme, false, true));
 				safeInvalidate(ctx);
 			})
@@ -5643,7 +5643,7 @@ function renderEditPreviewBody(
 			const suffix = remainder > 0
 				? `\n${theme.fg("muted", `… ${remainder} more edit blocks${toolOutputDetailHint(theme, ctx.expanded, true)}`)}`
 				: "";
-			ctx.state._ptBody = `${operations.length} edits ${summary}\n\n${sections.join("\n\n")}${suffix}`;
+			ctx.state._ptBody = `${sections.join("\n\n")}${suffix}`;
 			ctx.state._ptDisplay = indentBranchBlock(withBranch(ctx.state._ptBody, theme, false, true));
 			safeInvalidate(ctx);
 		})
