@@ -12,7 +12,13 @@
     "npm:pi-ayu-themes",
     "npm:pi-claude-code-ui"
   ],
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
+  "readOutputMode": "summary",
+  "searchOutputMode": "count",
+  "mcpOutputMode": "summary",
+  "bashOutputMode": "summary",
+  "liveToolPreview": false,
+  "previewLines": 3,
   "terminal": {
     "showImages": false,
     "showTerminalProgress": true

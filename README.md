@@ -31,6 +31,8 @@
 ```bash
 export CONTEXT7_API_KEY="你的 Context7 密钥"
 export ANYSEARCH_API_KEY="你的 AnySearch 密钥"
+# pi-claude-code-ui 默认去 ~/.pi/settings.json 读配置，设这个让它读到 ~/.pi/agent/settings.json
+export PI_CODING_AGENT_DIR="$HOME/.pi/agent"
 ```
 
 > Context7 与 AnySearch 不填密钥也能用，只是速率上限较低；DeepWiki 完全免费。

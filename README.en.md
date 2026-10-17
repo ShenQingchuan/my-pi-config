@@ -31,6 +31,8 @@ Keys are supplied via environment variables; add them to your shell profile (e.g
 ```bash
 export CONTEXT7_API_KEY="your Context7 key"
 export ANYSEARCH_API_KEY="your AnySearch key"
+# pi-claude-code-ui reads ~/.pi/settings.json by default; point it at the real settings file
+export PI_CODING_AGENT_DIR="$HOME/.pi/agent"
 ```
 
 > Context7 and AnySearch work without a key too, just with lower rate limits; DeepWiki is entirely free.
