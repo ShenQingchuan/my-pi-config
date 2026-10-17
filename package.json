@@ -8,7 +8,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "update-extensions": "bun run scripts/update-extensions.ts"
+    "update-extensions": "bun run scripts/update-extensions.ts",
+    "test": "bun test"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",

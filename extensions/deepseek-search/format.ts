@@ -4,6 +4,17 @@ import type { DeepSeekSearchItem } from './client'
 /** 每条搜索结果里正文的截断长度，避免单条结果吃掉整个上下文。 */
 const CONTENT_PREVIEW_CHARS = 1_200
 
+/**
+ * DeepSeek Fetch 返回的 Markdown 把几乎所有标点都加了反斜杠转义，连表格的列分隔符
+ * `|` 都被转义成 `\|`，导致表格直接渲染不出来。这里统一解掉这些转义。
+ *
+ * 只保留会改变语义的少数几种：`\*`、`\_`、`` \` ``、`\[`、`\]`、`\(`、`\)`，
+ * 它们用来阻止意外的强调、链接与代码语法；反斜杠自身也不动。
+ */
+export function cleanMarkdownEscapes(text: string): string {
+  return text.replace(/\\([/:.,#\-|"'{}=!])/g, '$1')
+}
+
 function formatDate(value: string | null): string {
   if (!value)
     return ''
@@ -34,7 +45,7 @@ function formatItem(item: DeepSeekSearchItem, index: number, withContent: boolea
     lines.push(`   ${summary.trim()}`)
 
   if (withContent && item.content) {
-    const body = item.content.trim()
+    const body = cleanMarkdownEscapes(item.content).trim()
     const shown = body.length > CONTENT_PREVIEW_CHARS
       ? `${body.slice(0, CONTENT_PREVIEW_CHARS)}…（正文共 ${body.length} 字符，需要全文请用 deepseek_fetch 抓取该 URL）`
       : body
@@ -62,7 +73,7 @@ export function truncateContent(
   content: string,
   maxChars: number,
 ): { text: string, truncated: boolean } {
-  const body = content.trim()
+  const body = cleanMarkdownEscapes(content).trim()
   const header = title ? `# ${title}\n来源：${url}\n\n` : `来源：${url}\n\n`
 
   if (body.length <= maxChars)
