@@ -37,6 +37,24 @@ export PI_CODING_AGENT_DIR="$HOME/.pi/agent"
 
 > Context7 and AnySearch work without a key too, just with lower rate limits; DeepWiki is entirely free.
 
+## Model providers
+
+Configuration lives in `extension-config/models.json`, linked to `~/.pi/agent/models.json` on install.
+
+`sub2tok` is an OpenAI-compatible proxy that serves Claude, GPT and Gemini models (22 in total).
+
+```bash
+export SUB2TOK_API_KEY="sk-..."
+```
+
+Only the environment variable is referenced; no plaintext key is stored. Pick a model with `/model`, or name it on the command line:
+
+```bash
+pi --provider sub2tok --model gemini-3.8-flash
+```
+
+Prices are not recorded in the config (all set to 0), and `contextWindow` / `maxTokens` are conservative estimates. Check the proxy's documentation for exact billing.
+
 ## Quick Start
 
 ```bash

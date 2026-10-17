@@ -37,6 +37,24 @@ export PI_CODING_AGENT_DIR="$HOME/.pi/agent"
 
 > Context7 与 AnySearch 不填密钥也能用，只是速率上限较低；DeepWiki 完全免费。
 
+## 模型提供商
+
+配置写在 `extension-config/models.json`，安装后链接到 `~/.pi/agent/models.json`。
+
+`sub2tok` 是一个兼容 OpenAI 接口的代理，提供 Claude、GPT、Gemini 等 22 个模型。
+
+```bash
+export SUB2TOK_API_KEY="sk-..."
+```
+
+配置里只引用环境变量，不存明文密钥。用 `/model` 选择模型，或用命令行指定：
+
+```bash
+pi --provider sub2tok --model gemini-3.8-flash
+```
+
+模型的价格未在配置里填写（统一记为 0），`contextWindow` 与 `maxTokens` 为保守估值。需要精确计费时请参考代理方的说明。
+
 ## 快速开始
 
 ```bash

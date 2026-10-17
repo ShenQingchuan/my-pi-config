@@ -1,0 +1,103 @@
+{
+  "model": "gemini-3.8-flash",
+  "samples": 3,
+  "concurrency": 3,
+  "probes": [
+    {
+      "id": "real-tradeoff",
+      "register": "技术权衡",
+      "source": "real",
+      "prompt": "请你去了解一下 https://astryx.atmeta.com/ 这个项目，我想要实现一个 vue 的版本，你觉得可行吗？不着急技术实现。"
+    },
+    {
+      "id": "real-plain-talk",
+      "register": "风格要求",
+      "source": "real",
+      "prompt": "请你不要说黑话、说大白话、不要拽词。"
+    },
+    {
+      "id": "real-teach",
+      "register": "教学解释",
+      "source": "real",
+      "prompt": "core 主要是干嘛的？"
+    },
+    {
+      "id": "real-direction",
+      "register": "方向确认",
+      "source": "real",
+      "prompt": "好。我看到你停下了。I got kinda lost, where are we now? 我们下一步做什么"
+    },
+    {
+      "id": "real-requirement",
+      "register": "提要求",
+      "source": "real",
+      "prompt": "我主要想和你说：我们的文档要写终态、文档不是我们的实现计划书。"
+    },
+    {
+      "id": "real-suspect",
+      "register": "怀疑追责",
+      "source": "real",
+      "prompt": "在你刚才调整底色之前都还是好的、开始使用 按钮都可以点。你看看是不是那一次的修改导致的？"
+    },
+    {
+      "id": "real-reject",
+      "register": "否定",
+      "source": "real",
+      "prompt": "这个 @tests/workspace.test.ts 毫无意义、花瓶测试、没有意义"
+    },
+    {
+      "id": "real-dissatisfied",
+      "register": "不满",
+      "source": "real",
+      "prompt": "你看看人家的示例、你写得感觉有点... 太自己发挥了"
+    },
+    {
+      "id": "probe-report",
+      "register": "工作汇报",
+      "source": "designed",
+      "prompt": "汇报一下：我们把构建工具从 webpack 换成了 rsbuild，构建时间从 40 秒降到 12 秒，产物体积减少 18%。"
+    },
+    {
+      "id": "probe-tradeoff",
+      "register": "技术权衡",
+      "source": "designed",
+      "prompt": "两个方案：A 是自研，前期慢但后面可控；B 是接现成服务，一周能上线但按量付费且以后难换。我该选哪个？"
+    },
+    {
+      "id": "probe-teach",
+      "register": "教学解释",
+      "source": "designed",
+      "prompt": "用大白话讲讲什么是幂等，别举银行转账的例子。"
+    },
+    {
+      "id": "probe-casual",
+      "register": "日常闲聊",
+      "source": "designed",
+      "prompt": "今天有点累，改了一下午 CSS 还是没对齐。"
+    },
+    {
+      "id": "probe-create",
+      "register": "创意发散",
+      "source": "designed",
+      "prompt": "给一个 Vue 组件库起 5 个名字，要求好念、能注册成 npm scope。"
+    },
+    {
+      "id": "probe-care",
+      "register": "共情",
+      "source": "designed",
+      "prompt": "我又把这个 bug 改回去了，白白浪费一整天。"
+    },
+    {
+      "id": "probe-pushback",
+      "register": "被反驳",
+      "source": "designed",
+      "prompt": "你说的不对吧？我觉得你这个判断有问题，你根本没有认真看代码。"
+    },
+    {
+      "id": "probe-boundary",
+      "register": "知识边界",
+      "source": "designed",
+      "prompt": "2027 年 React 会出什么新特性？"
+    }
+  ]
+}

@@ -14,4 +14,12 @@ export default antfu(
       'node/prefer-global/process': 'off',
     },
   },
+  {
+    // CLI 脚本：允许直接打印进度和使用顶层 await
+    files: ['research/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+      'antfu/no-top-level-await': 'off',
+    },
+  },
 )
