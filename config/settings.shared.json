@@ -13,6 +13,7 @@
     "./extensions/pi-claude-code-ui"
   ],
   "hideThinkingBlock": true,
+  "thinkingPeekLines": 10,
   "readOutputMode": "summary",
   "searchOutputMode": "count",
   "mcpOutputMode": "summary",

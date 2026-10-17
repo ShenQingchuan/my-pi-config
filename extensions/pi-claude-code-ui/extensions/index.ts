@@ -153,6 +153,8 @@ interface SettingsFile {
 	 * renders expanded, like stock pi.
 	 */
 	thinkingMode?: "live" | "full";
+	/** Show only the last N lines of streaming thinking while collapsed. 0 = off (full expanded). */
+	thinkingPeekLines?: number;
 	/** Gray level 0–255 for ├ └ │ when branch color mode is `fixed`. */
 	toolBranchRgbGray?: number;
 	/** `fixed` (default): rgb gray 72, theme-independent. `theme`: dim → muted → borderMuted. */
@@ -2745,6 +2747,7 @@ function patchAssistantMessages(): void {
 		//   expanded while streaming, and collapses to `Thought for Xs` once done.
 		// - "full" mode: behaves like stock pi (stays collapsed).
 		const liveMode = getThinkingMode() === "live";
+		const thinkingPeekLines = readSettings().thinkingPeekLines ?? 0;
 		const thinkingCollapsed = !!(this as any).hideThinkingBlock;
 		const override = (this as any).thinkingVisibilityOverrides?.get?.(0);
 		const showLiveThinking = liveMode && thinkingCollapsed && override !== true && isLiveThinkingMessage(this, message);
@@ -2777,7 +2780,8 @@ function patchAssistantMessages(): void {
 				const isThinking = !!(inner as any).defaultTextStyle?.italic;
 				if (isThinking) {
 					const style = (inner as any).defaultTextStyle;
-					const replacement = new ThinkingParagraph(text, mdTheme, style, options);
+					const shownText = showLiveThinking && thinkingPeekLines > 0 ? truncateToLastLines(text, thinkingPeekLines) : text;
+					const replacement = new ThinkingParagraph(shownText, mdTheme, style, options);
 					if ((child as any)?.child !== undefined) {
 						(child as any).child = replacement;
 					} else {
@@ -4892,6 +4896,11 @@ function lnum(n: number | null, width: number, fg = FG_LNUM): string {
 
 function stripes(width: number): string {
 	return BG_BASE + FG_STRIPE + "╱".repeat(width) + D_RST;
+}
+
+function truncateToLastLines(text: string, max: number): string {
+	const lines = text.split("\n");
+	return lines.length <= max ? text : lines.slice(lines.length - max).join("\n");
 }
 
 function renderDiffStatBar(added: number, removed: number, width = termW()): string {
