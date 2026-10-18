@@ -9,7 +9,14 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "update-extensions": "bun run scripts/update-extensions.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "stack:start": "pm2 start ecosystem.config.cjs",
+    "stack:stop": "pm2 stop ecosystem.config.cjs",
+    "stack:restart": "pm2 restart ecosystem.config.cjs",
+    "stack:status": "pm2 list",
+    "stack:logs": "pm2 logs",
+    "stack:save": "pm2 save",
+    "stack:autostart": "bun run scripts/stack-autostart.ts"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",

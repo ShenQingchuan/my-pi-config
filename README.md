@@ -55,6 +55,31 @@ pi --provider sub2tok --model gemini-3.8-flash
 
 模型的价格未在配置里填写（统一记为 0），`contextWindow` 与 `maxTokens` 为保守估值。需要精确计费时请参考代理方的说明。
 
+## 远程访问（Pi Web + Cloudflare Tunnel）
+
+把 Pi 变成手机随时可用的服务。两个进程由 PM2 守护，进程挂掉会自动拉起。
+
+1. 安装依赖：`bun add -g pm2`，并安装 `cloudflared`（`brew install cloudflared`，或把二进制放到 `~/.local/bin`）。
+2. 复制密钥文件并填写：`cp .env.example .env.local`（`.env.local` 不入库，换机时手动填一次）。
+3. 启动整套服务：`bun run stack:start`，保存开机快照：`bun run stack:save`。
+
+| 命令 | 作用 |
+| --- | --- |
+| `bun run stack:start` | 启动 / 重载 Pi Web 与 Cloudflare Tunnel |
+| `bun run stack:stop` | 停止两个进程 |
+| `bun run stack:restart` | 重启两个进程 |
+| `bun run stack:status` | 查看运行状态 |
+| `bun run stack:logs` | 查看实时日志 |
+| `bun run stack:save` | 保存当前进程列表为开机快照 |
+| `bun run stack:autostart` | 安装开机自启（macOS LaunchAgent，不需要 sudo） |
+
+开机自启的安装顺序：先把服务跑起来 → `bun run stack:save` 冻结快照 → `bun run stack:autostart` 注册 LaunchAgent。以后开机会自动执行 `pm2 resurrect`，把快照里的进程拉回来。
+
+> `cloudflared` 只需要跑在 PM2 下。如果之前用 `sudo cloudflared service install` 装过系统级服务，先移除它，否则会有两个连接器抢同一个隧道：
+> `sudo launchctl bootout system/com.cloudflare.cloudflared && sudo rm /Library/LaunchDaemons/com.cloudflare.cloudflared.plist`
+>
+> 同理，如果之前用 `sudo pm2 startup` 试过，它可能留下一个失效的旧 plist，一并清理：`sudo rm -f ~/Library/LaunchAgents/pm2.*.plist`
+
 ## 快速开始
 
 ```bash

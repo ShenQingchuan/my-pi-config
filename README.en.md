@@ -55,6 +55,31 @@ pi --provider sub2tok --model gemini-3.8-flash
 
 Prices are not recorded in the config (all set to 0), and `contextWindow` / `maxTokens` are conservative estimates. Check the proxy's documentation for exact billing.
 
+## Remote Access (Pi Web + Cloudflare Tunnel)
+
+Turns Pi into a service you can reach from your phone. Both processes run under PM2 and restart automatically if they die.
+
+1. Install `pm2` globally (`bun add -g pm2`) and `cloudflared` (`brew install cloudflared`, or drop the binary into `~/.local/bin`).
+2. Copy the secrets file and fill it in: `cp .env.example .env.local` (`.env.local` is git-ignored; re-create it once per machine).
+3. Start everything: `bun run stack:start`, then save the boot snapshot: `bun run stack:save`.
+
+| Command | Effect |
+| --- | --- |
+| `bun run stack:start` | Start / reload Pi Web and Cloudflare Tunnel |
+| `bun run stack:stop` | Stop both processes |
+| `bun run stack:restart` | Restart both processes |
+| `bun run stack:status` | Show running state |
+| `bun run stack:logs` | Tail live logs |
+| `bun run stack:save` | Save the current process list as the boot snapshot |
+| `bun run stack:autostart` | Install boot autostart (macOS LaunchAgent, no sudo needed) |
+
+Order for boot autostart: start the services → `bun run stack:save` to freeze the snapshot → `bun run stack:autostart` to register the LaunchAgent. On login, macOS then runs `pm2 resurrect` and brings back everything in the snapshot.
+
+> `cloudflared` should only run under PM2. If it was ever installed as a system service with `sudo cloudflared service install`, remove it first, otherwise two connectors fight over the same tunnel:
+> `sudo launchctl bootout system/com.cloudflare.cloudflared && sudo rm /Library/LaunchDaemons/com.cloudflare.cloudflared.plist`
+>
+> Likewise, if you tried `sudo pm2 startup` before, it may have left a broken plist behind: `sudo rm -f ~/Library/LaunchAgents/pm2.*.plist`
+
 ## Quick Start
 
 ```bash

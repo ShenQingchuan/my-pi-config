@@ -8,3 +8,7 @@ tmp/
 
 # 本地研究产物与导出，不入库
 research/
+
+# 本机密钥（Pi Web 密码、Cloudflare Tunnel Token 等）
+# 从 .env.example 复制一份 .env.local 并填写自己的值，此文件不入库
+.env.local
