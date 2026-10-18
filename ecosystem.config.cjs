@@ -8,7 +8,9 @@ module.exports = {
     {
       name: 'pi-web',
       script: 'bun',
-      args: 'x --bun @agegr/pi-web --no-open',
+      // 不要加 --bun：内置终端用 node-pty 的原生 forkpty，Bun 运行时下会卡住
+      // spawn-helper，导致终端无输出且 resize 报 ioctl(2) failed
+      args: 'x @agegr/pi-web --no-open',
       cwd: path.resolve(__dirname),
       interpreter: 'none',
       autorestart: true,
