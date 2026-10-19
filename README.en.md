@@ -71,9 +71,14 @@ Turns Pi into a service you can reach from your phone. Both processes run under 
 | `bun run stack:status` | Show running state |
 | `bun run stack:logs` | Tail live logs |
 | `bun run stack:save` | Save the current process list as the boot snapshot |
-| `bun run stack:autostart` | Install boot autostart (macOS LaunchAgent, no sudo needed) |
+| `bun run stack:autostart` | Install boot autostart + tunnel health check (macOS LaunchAgent, no sudo needed) |
 
-Order for boot autostart: start the services → `bun run stack:save` to freeze the snapshot → `bun run stack:autostart` to register the LaunchAgent. On login, macOS then runs `pm2 resurrect` and brings back everything in the snapshot.
+Order for boot autostart: start the services → `bun run stack:save` to freeze the snapshot → `bun run stack:autostart`. It installs two LaunchAgents:
+
+- `dev.local.pm2-resurrect`: runs `pm2 resurrect` on login to bring the snapshot back
+- `dev.local.pi-stack-health`: probes the public URL every 5 minutes and restarts `cloudflared` after two consecutive failures
+
+The health check is not optional: PM2 only watches process liveness, while `cloudflared` can keep a process alive with a tunnel that never connects — PM2 sees nothing wrong.
 
 > `cloudflared` should only run under PM2. If it was ever installed as a system service with `sudo cloudflared service install`, remove it first, otherwise two connectors fight over the same tunnel:
 > `sudo launchctl bootout system/com.cloudflare.cloudflared && sudo rm /Library/LaunchDaemons/com.cloudflare.cloudflared.plist`

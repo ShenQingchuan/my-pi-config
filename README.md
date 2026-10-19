@@ -71,9 +71,14 @@ pi --provider sub2tok --model gemini-3.8-flash
 | `bun run stack:status` | 查看运行状态 |
 | `bun run stack:logs` | 查看实时日志 |
 | `bun run stack:save` | 保存当前进程列表为开机快照 |
-| `bun run stack:autostart` | 安装开机自启（macOS LaunchAgent，不需要 sudo） |
+| `bun run stack:autostart` | 安装开机自启 + 隧道健康检查（macOS LaunchAgent，不需要 sudo） |
 
-开机自启的安装顺序：先把服务跑起来 → `bun run stack:save` 冻结快照 → `bun run stack:autostart` 注册 LaunchAgent。以后开机会自动执行 `pm2 resurrect`，把快照里的进程拉回来。
+开机自启的安装顺序：先把服务跑起来 → `bun run stack:save` 冻结快照 → `bun run stack:autostart`。它装两个 LaunchAgent：
+
+- `dev.local.pm2-resurrect`：登录后执行 `pm2 resurrect`，把快照里的进程拉回来
+- `dev.local.pi-stack-health`：每 5 分钟探测一次公网入口，连续两次不通就重启 `cloudflared`
+
+健康检查是必需的：PM2 只看进程是否存活，`cloudflared` 可能进程在跑、连接却一直超时，这时 PM2 认为一切正常。
 
 > `cloudflared` 只需要跑在 PM2 下。如果之前用 `sudo cloudflared service install` 装过系统级服务，先移除它，否则会有两个连接器抢同一个隧道：
 > `sudo launchctl bootout system/com.cloudflare.cloudflared && sudo rm /Library/LaunchDaemons/com.cloudflare.cloudflared.plist`
