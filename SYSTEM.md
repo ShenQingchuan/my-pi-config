@@ -7,3 +7,4 @@
    - 用户明确说「记住 xxx」时跳过确认，直接写入。
    - 同一件事只留一条（优先更新旧条目），宁可删旧也不要多记；过程叙事、方案探索、已放弃的方向、当前状态快照，一律不记。
 5. 代码注释里不要保留逻辑变更历史，专注于描述现状和解释用途。
+6. 访问中国大陆以外的网络服务（如 GitHub、npm registry、Google 等）时，默认走本地 Clash 代理。终端里 `vpn` 是 zsh alias，非交互 shell 里用不了，要直接设置环境变量：`export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`。遇到 git fetch/push、pnpm install、curl 等超时或 HTTP2 报错，先检查是否漏了代理。
