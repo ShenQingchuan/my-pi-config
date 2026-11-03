@@ -10,9 +10,21 @@
     "npm:pi-balance",
     "npm:pi-context-view",
     "npm:pi-ayu-themes",
-    "npm:context-mode"
+    "npm:context-mode",
+    "./extensions/pi-claude-code-ui",
+    "./extensions/deepseek-search"
   ],
-  "hideThinkingBlock": false,
+  "defaultTools": [
+    "+codemode"
+  ],
+  "hideThinkingBlock": true,
+  "thinkingPeekLines": 10,
+  "readOutputMode": "summary",
+  "searchOutputMode": "count",
+  "mcpOutputMode": "summary",
+  "bashOutputMode": "summary",
+  "liveToolPreview": false,
+  "previewLines": 3,
   "terminal": {
     "showImages": false,
     "showTerminalProgress": true

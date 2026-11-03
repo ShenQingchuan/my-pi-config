@@ -1,0 +1,22 @@
+{
+  // 这个包是上游 pi-claude-code-ui 的本地 vendored 副本（见 README），代码基本保持原样。
+  // 这份配置只干两件事：
+  //   1. 让编辑器在这里认识 process / setTimeout 这类运行时全局（types: bun），
+  //      否则打开包里的 .ts 会报“找不到名称 process”。
+  //   2. 不参与根目录的 `bun run typecheck`，也不对上游代码做类型检查（noCheck）。
+  //      原因：上游 fork 与已安装的 pi-tui 版本有已知的类型漂移，
+  //      做全量检查只会刷出一堆与我们无关的红线。
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "moduleDetection": "force",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "types": ["bun"],
+    "strict": true,
+    "noEmit": true,
+    "noCheck": true,
+    "skipLibCheck": true
+  },
+  "include": ["extensions/**/*.ts"]
+}

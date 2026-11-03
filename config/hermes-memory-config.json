@@ -1,0 +1,14 @@
+{
+  "reviewEnabled": false,
+  "flushOnCompact": false,
+  "flushOnShutdown": false,
+  "correctionDetection": false,
+  "autoConsolidate": false,
+  "memoryOverflowStrategy": "reject",
+  "memoryCharLimit": 2500,
+  "userCharLimit": 2500,
+  "projectCharLimit": 4000,
+  "failureInjectionMaxEntries": 3,
+  "memoryPolicyStyle": "custom",
+  "memoryPolicyCustomText": "记忆写入默认关闭。除用户明确说「记住 xxx」可直接写入外，其它任何写入都必须走两步确认：\n第一步，说「当前有新的记忆点产生，是否要写入？」，然后每个记忆点用一句话描述，一次最多 5 条。\n第二步，用户同意后，把最终要写入的完整内容再呈现一遍，得到第二次同意才真正写入。\n\n值得记的只有：用户的稳定偏好与沟通方式、工具或平台的硬约束、会改变下次行为的教训。过程叙事、方案探索、已放弃的方向、当前状态快照，一律不记。同一件事只留一条，优先更新旧条目；宁可删旧，不要多记。\n\n存储位置：user=用户本人（偏好、风格、身份）；memory=全局知识与环境事实；project=当前仓库的约定与架构决策；failure=踩过的坑与教训（带 category）。"
+}
