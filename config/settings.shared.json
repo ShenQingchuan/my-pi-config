@@ -2,7 +2,6 @@
   "lastChangelogVersion": "0.85.1",
   "theme": "ayu-dark",
   "packages": [
-    "npm:pi-mcp-adapter",
     "npm:@tintinweb/pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
@@ -10,7 +9,8 @@
     "npm:pi-open-tui",
     "npm:pi-balance",
     "npm:pi-context-view",
-    "npm:pi-ayu-themes"
+    "npm:pi-ayu-themes",
+    "npm:context-mode"
   ],
   "hideThinkingBlock": false,
   "terminal": {
