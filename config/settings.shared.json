@@ -10,7 +10,6 @@
     "npm:pi-balance",
     "npm:pi-context-view",
     "npm:pi-ayu-themes",
-    "npm:context-mode",
     "./extensions/pi-claude-code-ui",
     "./extensions/deepseek-search"
   ],
