@@ -9,6 +9,6 @@
     "pi-balance": "^1.1.1",
     "pi-context-view": "^0.8.4",
     "pi-hermes-memory": "^0.11.0",
-    "pi-open-tui": "^0.4.5"
+    "pi-open-tui": "^0.4.6"
   }
 }
