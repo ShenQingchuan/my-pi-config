@@ -24,6 +24,7 @@
   "bashOutputMode": "summary",
   "liveToolPreview": false,
   "previewLines": 3,
+  "expandedPreviewMaxLines": 400,
   "terminal": {
     "showImages": false,
     "showTerminalProgress": true

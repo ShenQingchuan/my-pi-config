@@ -6604,7 +6604,8 @@ function renderMcpToolResult(result: any, expanded: boolean, isPartial: boolean,
 	}
 
 	const statusText = ctx.isError ? theme.fg("error", lines[0]) : theme.fg("muted", `${lines.length} line${lines.length === 1 ? "" : "s"} returned`);
-	if (mode === "summary") return makeText(ctx.lastComponent, withBranch(statusText, theme));
+	// Expanding always reveals output; the mode only governs the collapsed row.
+	if (!expanded && mode === "summary") return makeText(ctx.lastComponent, withBranch(statusText, theme));
 	if (!expanded) return makeText(ctx.lastComponent, withBranch(`${statusText}${toolOutputDetailHint(theme, expanded)}`, theme));
 	const preview = buildPreviewText(
 		lines,
@@ -7372,7 +7373,7 @@ export default function (pi: ExtensionAPI) {
 			let text = theme.fg("muted", `${lines.length} lines loaded`);
 			if (details?.truncation?.truncated) text += theme.fg("warning", " (truncated)");
 			if (!expanded) return makeText(ctx.lastComponent, withBranch(`${text}${toolOutputDetailHint(theme, expanded)}`, theme));
-			text += `\n${buildPreviewText(lines, false, theme, previewLimit(), lines.length, (line) => theme.fg("dim", line || " "))}`;
+			text += `\n${buildPreviewText(lines, expanded, theme, previewLimit(), lines.length, (line) => theme.fg("dim", line || " "))}`;
 			return makeText(ctx.lastComponent, withBranch(text, theme));
 		},
 	});
@@ -7442,7 +7443,8 @@ export default function (pi: ExtensionAPI) {
 			text += theme.fg("muted", ` (${nonEmpty.total} lines)`);
 			if (details?.truncation?.truncated) text += theme.fg("warning", " [truncated]");
 			const mode = bashOutputMode();
-			if (mode === "summary") return makeText(ctx.lastComponent, withBranch(text, theme));
+			// Expanding always reveals output; the mode only governs the collapsed row.
+			if (!expanded && mode === "summary") return makeText(ctx.lastComponent, withBranch(text, theme));
 			const persistentPreview = shouldPreserveBashPreview(ctx) ? buildPersistentBashPreview(nonEmpty.lines, theme) : "";
 			if (!expanded && mode === "preview") {
 				const previewLines = nonEmpty.lines.slice(0, bashCollapsedLimit());
@@ -7456,7 +7458,7 @@ export default function (pi: ExtensionAPI) {
 			if (!expanded) return makeText(ctx.lastComponent, withBranch(text, theme));
 			const collapsed = bashCollapsedLimit();
 			if (rewrite) text += `\n${formatRtkRewriteDetails(rewrite, theme)}`;
-			text += `\n${buildPreviewText(nonEmpty.lines, false, theme, collapsed, nonEmpty.total, (line) => theme.fg("dim", line))}`;
+			text += `\n${buildPreviewText(nonEmpty.lines, expanded, theme, collapsed, nonEmpty.total, (line) => theme.fg("dim", line))}`;
 			return makeText(ctx.lastComponent, withBranch(text, theme));
 		},
 	});
@@ -7498,7 +7500,7 @@ export default function (pi: ExtensionAPI) {
 			let text = theme.fg("muted", `${matches.length} matches`);
 			if (details?.truncation?.truncated) text += theme.fg("warning", " (truncated)");
 			if (!expanded) return makeText(ctx.lastComponent, withBranch(`${text}${toolOutputDetailHint(theme, expanded)}`, theme));
-			text += `\n${buildPreviewText(matches, false, theme, previewLimit(), matches.length, (line) => theme.fg("dim", line))}`;
+			text += `\n${buildPreviewText(matches, expanded, theme, previewLimit(), matches.length, (line) => theme.fg("dim", line))}`;
 			return makeText(ctx.lastComponent, withBranch(text, theme));
 		},
 	});
@@ -7539,7 +7541,7 @@ export default function (pi: ExtensionAPI) {
 			let text = theme.fg("muted", `${items.length} files`);
 			if (!expanded) return makeText(ctx.lastComponent, withBranch(`${text}${toolOutputDetailHint(theme, expanded)}`, theme));
 			// Expanded: grouped find results with icons
-			const maxShow = previewLimit();
+			const maxShow = expandedPreviewLimit();
 			const shown = items.slice(0, maxShow);
 			const findLines: string[] = [];
 			for (let i = 0; i < shown.length; i++) {
@@ -7588,7 +7590,7 @@ export default function (pi: ExtensionAPI) {
 			let text = theme.fg("muted", `${items.length} entries`);
 			if (!expanded) return makeText(ctx.lastComponent, withBranch(`${text}${toolOutputDetailHint(theme, expanded)}`, theme));
 			// Expanded: tree-view with icons
-			const maxShow = previewLimit();
+			const maxShow = expandedPreviewLimit();
 			const shown = items.slice(0, maxShow);
 			const treeLines: string[] = [];
 			for (let i = 0; i < shown.length; i++) {
